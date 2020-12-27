@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript"
+	src="https://cdn.jsdelivr.net/npm/brython@3.9.0/brython.min.js">
+    </script>
+    <script type="text/javascript"
+	src="https://cdn.jsdelivr.net/npm/brython@3.9.0/brython_stdlib.js">
+    </script>
+    <style>
+	td{
+	    background-color: #ccc;
+	    padding: 30px 30px 30px 30px;
+	    border-radius: 0.2em;
+	}
+	table{
+	    border-width: 10px;
+	    border-style: solid;
+	    border-radius: 1em;
+	    border-color: #ccc;
+	}
+    </style>
+</head>
+
+<body onload="brython()">
+
+<script type="text/python">
+from browser import document, html
+import random
+
+size = 5
+color_style = {	"b": "#33e",
+		"r": "#e33",
+		"o": "#ccc",
+		"x": "#333"}
+
+board = html.TABLE(id="starter")
+board <= (html.TR(html.TD(id=cell) for cell in range(line*size,(line+1)*size)) for line in range(0,size))
+document <= board
+
+starter_color = 'b' if random.choice([True, False]) else 'r'
+colors = ['b']*8+['r']*8+['o']*7+['x']+[starter_color]
+random.shuffle(colors)
+for i,color in enumerate(colors):
+	document[str(i)].style = {"backgroundColor": color_style[color]}
+document["starter"].style = {"borderColor": color_style[starter_color]}
+</script>
+
+
+</body>
+
+</html>
