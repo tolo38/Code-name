@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/brython@3.9.0/brython.min.js">
+    </script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/brython@3.9.0/brython_stdlib.js">
+    </script>
+    <style>
+        div{
+            min-width: 30px;
+            min-height: 30px;
+            width: 15vmin;
+            height: 15vmin;
+        }
+        td{
+            background-color: #ccc;
+            border-radius: 0.2em;
+        }
+        table{
+            border-width: 3vmin;
+            border-style: solid;
+            border-radius: 1em;
+            border-color: #ff7;
+        }
+        table{
+            white-space: nowrap;
+            display: inline-block;
+        }
+        table:not(:last-child){
+            margin-right: 1500px;
+            border-color: #7ff;
+        }
+        body{
+            white-space: nowrap;
+        }        
+        </style>
+    <title> Code Names Duo </title>
+</head>
+
+<body onload="brython()">
+
+    <script type="text/python">
+        from browser import document, html, window
+        import random
+        
+        size = 5
+        color_style = { "v": "#3e3",
+                "t": "#3e3",
+                "y": "#ccc",
+                "o": "#ccc",
+                "xt": "#333",
+                "xy": "#ccc",
+                "x": "#333"}
+        color_code = { k:i for i,k in enumerate([*color_style])}
+        color_decode = { i:k for k,i in color_code.items()}
+
+        params = window.URLSearchParams.new(window.location.search)
+        colors = params.get("board")
+        reset = params.get("new") is ""
+
+        if reset and colors:
+            colors = [ color_decode[int(c)] for c in str(int(colors, 16))]
+#Useful for debug
+            #document <= html.DIV(str(colors))
+        else:
+            colors = ['v']*3+['t']*6+['y']*6+['o']*5+['xt']*2+['xy']*2+['x']
+            random.shuffle(colors)
+#Two char could be save if inner int in base 8 instead of 10 
+    #code = hex(int("".join( str(color_code[i]) for i in colors)))
+    #using int(,8)
+    #code = hex(int("".join( str(color_code[i]) for i in colors),8))
+    #and the shoud be retrive with
+    #format(, "o")
+    #colors = [ color_decode[int(c)] for c in str(int(colors, 16))]
+    #colors = [ color_decode[int(c)] for c in str(format(int(colors, 16)),"o")]
+            code = hex(int("".join( str(color_code[i]) for i in colors)))
+            params = window.URLSearchParams.new()
+            params.append("board", code)
+            params.append("new", "")
+#"?board=45455&new"
+            window.location.search = params.toString() 
+
+        #board = html.TABLE()
+#Set the url to clipboard when click on the board
+        board = html.TABLE(onclick="window.navigator.clipboard.writeText('test5456');")
+        board <= (html.TR(html.TD(html.DIV(), id=cell) for cell in range(line*size,(line+1)*size)) for line in range(0,size))
+        document <= board
+        
+        
+        for i,color in enumerate(colors):
+            document[str(i)].style = {"backgroundColor": color_style[color]}
+
+        color_style['y'],  color_style['t']  = color_style['t'],  color_style['y']
+        color_style['xy'], color_style['xt'] = color_style['xt'], color_style['xy']
+
+        board = html.TABLE()
+        board <= (html.TR(html.TD(html.DIV(), id=cell+25) for cell in range(line*size,(line+1)*size)) for line in range(0,size))
+        document <= board
+        
+        for i,color in enumerate(colors):
+            document[str(i+25)].style = {"backgroundColor": color_style[color]}
+
+
+
+#https://www.regledujeu.fr/codenames/
+#https://moovely.fr/test-jeu-de-cartes-codenames-duo/
+
+#TODO
+    #when reload => new game
+    #Add in the history the current game to play it again
+    #How to play 2 player,
+        #with one device
+       #     toggle the grids 
+        #with two devices
+    #should I use the clipboard
+      #  yes, when holding screen, copy the partner url and show pop message to say so
+    #should I add more params in url
+     #   No
+    </script>
+    <button onload:='navigator.clipboard.writeText("test5456")';>
+    </button>
+    
+    
+    </body>
+    
+</html>

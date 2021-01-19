@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <style>
+ body{
+  /*border: 1px solid black;*/
+    position: absolute;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+}
+ body{
+    background : #fff;
+}
+
+#bam { width:100px; height: 100px;  background: #fff}
+
+#bam:active,/*useless*/
+body:active > #bam
+{
+  background : #f55;
+  transition : all 2s linear;
+}
+ </style>
+</head>
+<body>
+
+<div id="bam"></div>
+
+<script>
+var mouseTimer;
+function mouseDown() {
+  mouseTimer = window.setTimeout(execMouseDown, 2000); //set timeout to fire in 2 seconds when the user presses mouse button down
+}
+
+function mouseUp() {
+  if (mouseTimer) window.clearTimeout(mouseTimer); //cancel timer when mouse button is released
+}
+
+function execMouseDown() {
+  div.style.backgroundColor = "#CFCF00";
+  var url = window.location.href;
+if(navigator.share){
+  const shareData = {
+  title: 'MDN',
+  text: 'Learn web development on MDN!',
+  url: url,
+}
+
+  try {
+    navigator.share(shareData)
+    div.textContent = 'MDN shared successfully'
+  } catch(err) {
+    div.textContent = 'Error: ' + err
+  }
+}else{
+    navigator.clipboard.writeText(url);
+    alert("Link copied, past it to share the game");
+}
+}
+
+var div = document.getElementById("bam");
+div.addEventListener("mousedown", mouseDown);
+//document.body.addEventListener("mousedown", mouseDown);
+document.body.addEventListener("mouseup", mouseUp); //listen for mouse up event on body, not just the element you originally clicked on
+
+/*
+useful links
+https://alligator.io/js/web-share-api/
+https://www.kirupa.com/html5/press_and_hold.htm
+https://stackoverflow.com/questions/4502633/how-to-affect-other-elements-when-one-element-is-hovered
+https://www.whitebyte.info/programming/css/how-to-make-a-div-take-the-remaining-height
+https://developer.mozilla.org/fr/docs/Web/CSS/cursor
+https://stackoverflow.com/questions/14032568/create-a-div-next-to-the-cursor-position-on-click
+*/
+
+</script>
+
+</body>
