@@ -21,12 +21,16 @@
             border-radius: 0.2em;
         }
         table{
+            position: absolute;
+            top:1vmin;
+            left:1vmin;
             border-width: 3vmin;
             border-style: solid;
             border-radius: 1em;
             border-color: #ff7;
+            display: none;
         }
-        table{
+        button:focus ~ table{
             white-space: nowrap;
             display: inline-block;
         }
@@ -34,6 +38,36 @@
             margin-right: 1500px;
             border-color: #7ff;
         }
+        button{
+            position: relative;
+            top: 20vmin;
+            left: 20vmin;
+            margin: 5vmin;
+            padding: 15vmin;
+            border-radius: 1em;
+
+        }
+        #t_{
+            background-color: #7ff;
+            border-color: #7ff;
+        }
+        #t_:focus,
+        #t_:focus ~ #y{
+            display: none;
+        }
+        #t_:focus ~ #y_{
+            left:100vmin;
+        }
+        
+        #y_{
+            background-color: #ff7;
+            border-color: #ff7;
+        }
+        #y_:focus,
+        #y_:focus ~ #t{
+            display: none;
+        }
+
         body{
             white-space: nowrap;
         }        
@@ -47,10 +81,13 @@
         from browser import document, html, window
         import random
         
+        for c in ['t', 'y']:
+            document <= html.BUTTON(id=c+'_')
+
         size = 5
-        color_style = { "v": "#3e3",
-                "t": "#3e3",
-                "y": "#ccc",
+        color_style = { "g": "#3e3",    #green
+                "t": "#3e3",            #green-turquoise
+                "y": "#ccc",            #green-yellow
                 "o": "#ccc",
                 "xt": "#333",
                 "xy": "#ccc",
@@ -67,7 +104,7 @@
 #Useful for debug
             #document <= html.DIV(str(colors))
         else:
-            colors = ['v']*3+['t']*6+['y']*6+['o']*5+['xt']*2+['xy']*2+['x']
+            colors = ['g']*3+['t']*6+['y']*6+['o']*5+['xt']*2+['xy']*2+['x']
             random.shuffle(colors)
 #Two char could be save if inner int in base 8 instead of 10 
     #code = hex(int("".join( str(color_code[i]) for i in colors)))
@@ -84,9 +121,9 @@
 #"?board=45455&new"
             window.location.search = params.toString() 
 
-        #board = html.TABLE()
-#Set the url to clipboard when click on the board
-        board = html.TABLE(onclick="window.navigator.clipboard.writeText('test5456');")
+        board = html.TABLE(id='t')
+#Set the url to clipboard when click on body
+        #board = html.TABLE(onclick="window.navigator.clipboard.writeText('test5456');")
         board <= (html.TR(html.TD(html.DIV(), id=cell) for cell in range(line*size,(line+1)*size)) for line in range(0,size))
         document <= board
         
@@ -97,13 +134,12 @@
         color_style['y'],  color_style['t']  = color_style['t'],  color_style['y']
         color_style['xy'], color_style['xt'] = color_style['xt'], color_style['xy']
 
-        board = html.TABLE()
+        board = html.TABLE(id='y')
         board <= (html.TR(html.TD(html.DIV(), id=cell+25) for cell in range(line*size,(line+1)*size)) for line in range(0,size))
         document <= board
         
         for i,color in enumerate(colors):
             document[str(i+25)].style = {"backgroundColor": color_style[color]}
-
 
 
 #https://www.regledujeu.fr/codenames/
@@ -121,9 +157,6 @@
     #should I add more params in url
      #   No
     </script>
-    <button onload:='navigator.clipboard.writeText("test5456")';>
-    </button>
-    
     
     </body>
     
