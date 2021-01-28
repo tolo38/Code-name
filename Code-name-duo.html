@@ -30,10 +30,6 @@
             border-color: #ff7;
             display: none;
         }
-        button:focus ~ table{
-            white-space: nowrap;
-            display: inline-block;
-        }
         table:not(:last-child){
             margin-right: 1500px;
             border-color: #7ff;
@@ -51,26 +47,27 @@
             background-color: #7ff;
             border-color: #7ff;
         }
-        #t_:focus,
-        #t_:focus ~ #y{
-            display: none;
-        }
-        #t_:focus ~ #y_{
-            left:100vmin;
-        }
         
         #y_{
             background-color: #ff7;
             border-color: #ff7;
         }
-        #y_:focus,
-        #y_:focus ~ #t{
-            display: none;
-        }
-
         body{
             white-space: nowrap;
-        }        
+        }
+        #t_.t_,
+        #y_.y_{
+            display:none;
+        }
+        #t_.y_,
+        #y_.t_{
+            left:100vmin;
+        }
+        #t.t_,
+        #y.y_{
+            display:inline-block;
+        }
+
         </style>
     <title> Code Names Duo </title>
 </head>
@@ -78,11 +75,8 @@
 <body onload="brython()">
 
     <script type="text/python">
-        from browser import document, html, window
+        from browser import document, html, window  #,console
         import random
-        
-        for c in ['t', 'y']:
-            document <= html.BUTTON(id=c+'_')
 
         size = 5
         color_style = { "g": "#3e3",    #green
@@ -141,6 +135,26 @@
         for i,color in enumerate(colors):
             document[str(i+25)].style = {"backgroundColor": color_style[color]}
 
+#----------- Hide and Display----------
+        
+        def update_style_class(c):
+            for id in ['t', 'y', 't_', 'y_']:
+                document[id].className = c
+
+        class toggle:
+            status = None
+            def game(self,event):
+                if(self.status):
+                    self.status = None
+                else:
+                    self.status = event.target.id
+                update_style_class(self.status)
+        toggle = toggle()
+
+        for c in ['t', 'y']:
+            document <= html.BUTTON(id=c+'_')
+            document[c+'_'].bind("click", toggle.game)
+        
 
 #https://www.regledujeu.fr/codenames/
 #https://moovely.fr/test-jeu-de-cartes-codenames-duo/
@@ -148,14 +162,10 @@
 #TODO
     #when reload => new game
     #Add in the history the current game to play it again
-    #How to play 2 player,
-        #with one device
-       #     toggle the grids 
-        #with two devices
-    #should I use the clipboard
-      #  yes, when holding screen, copy the partner url and show pop message to say so
+    #When holding screen, copy url and show pop message to say so
     #should I add more params in url
      #   No
+    #use class to better split code and style
     </script>
     
     </body>
