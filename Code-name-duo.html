@@ -27,12 +27,13 @@
             border-width: 3vmin;
             border-style: solid;
             border-radius: 1em;
-            border-color: #ff7;
             display: none;
         }
-        table:not(:last-child){
-            margin-right: 1500px;
+        table.t_{
             border-color: #7ff;
+        }
+        table.y_{
+            border-color: #ff7;
         }
         button{
             position: relative;
@@ -43,6 +44,17 @@
             border-radius: 1em;
 
         }
+
+        .o,.t,.y,.xt,.xy{
+            background-color : #ccc;
+        }
+        .g,.t_ .t,.y_ .y{
+            background-color : #3e3;
+        }
+        .x,.t_ .xt,.y_ .xy{
+            background-color : #333;
+        }
+
         #t_{
             background-color: #7ff;
             border-color: #7ff;
@@ -63,8 +75,8 @@
         #y_.t_{
             left:100vmin;
         }
-        #t.t_,
-        #y.y_{
+        table.t_,
+        table.y_{
             display:inline-block;
         }
 
@@ -115,30 +127,19 @@
 #"?board=45455&new"
             window.location.search = params.toString() 
 
-        board = html.TABLE(id='t')
-#Set the url to clipboard when click on body
-        #board = html.TABLE(onclick="window.navigator.clipboard.writeText('test5456');")
+        board = html.TABLE(id='board')
         board <= (html.TR(html.TD(html.DIV(), id=cell) for cell in range(line*size,(line+1)*size)) for line in range(0,size))
         document <= board
         
         
         for i,color in enumerate(colors):
-            document[str(i)].style = {"backgroundColor": color_style[color]}
+            document[str(i)].className = color
 
-        color_style['y'],  color_style['t']  = color_style['t'],  color_style['y']
-        color_style['xy'], color_style['xt'] = color_style['xt'], color_style['xy']
-
-        board = html.TABLE(id='y')
-        board <= (html.TR(html.TD(html.DIV(), id=cell+25) for cell in range(line*size,(line+1)*size)) for line in range(0,size))
-        document <= board
-        
-        for i,color in enumerate(colors):
-            document[str(i+25)].style = {"backgroundColor": color_style[color]}
 
 #----------- Hide and Display----------
         
         def update_style_class(c):
-            for id in ['t', 'y', 't_', 'y_']:
+            for id in ['board', 't_', 'y_']:
                 document[id].className = c
 
         class toggle:
@@ -155,6 +156,10 @@
             document <= html.BUTTON(id=c+'_')
             document[c+'_'].bind("click", toggle.game)
         
+
+#Set the url to clipboard when click on body
+        #board = html.TABLE(onclick="window.navigator.clipboard.writeText('test5456');")
+#        window.history.replaceState(window.location.pathname, None, window.location.origin);
 
 #https://www.regledujeu.fr/codenames/
 #https://moovely.fr/test-jeu-de-cartes-codenames-duo/
